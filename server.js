@@ -5,13 +5,18 @@ const Assert = require('assert'),
   Path = require('path'),
     fs = require('fs');
 
-var options = {
+const OPTIONS = {
    key  : fs.readFileSync('./server.key'),
    cert : fs.readFileSync('./server.crt')
 };
 
+const data = {
+    "hello": "hello", 
+    "how": "are you?"
+}
+
 const server = new Hapi.Server();
-server.connection({ port: process.env.PORT || 3002, routes: { cors: true }, tls: options });
+server.connection({ port: process.env.PORT || 3002, routes: { cors: true }, tls: OPTIONS });
 
 
 
@@ -25,6 +30,14 @@ server.route({
   path:'/',
   handler:function(request,reply){
     reply('im listening')
+  }
+})
+
+server.route({
+  method:'GET',
+  path:'/data',
+  handler:function(request,reply){
+    reply(data)
   }
 })
 
